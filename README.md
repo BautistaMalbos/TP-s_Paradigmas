@@ -1,0 +1,1 @@
+# TP-s_Paradigmas
