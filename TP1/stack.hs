@@ -2,6 +2,7 @@ module Stack ( Stack, newS, freeCellsS, stackS, netS )
  where
 
 import Container
+import Route
 import Distribution.Utils.Generic (sndOf3)
 
 
@@ -61,3 +62,8 @@ pesoNeto2 = netS apilamiento3
 pesoNeto3 :: Int
 pesoNeto3 = netS apilamiento1 + netS apilamiento3
 
+holdsS :: Stack -> Container -> Route -> Bool -- indica si la pila puede aceptar el contenedor considerando las ciudades en la ruta
+                                            -- nuevo contenedor no puede tener destino posterior al de abajo
+holdsS (Sta listacontenedores capacidad) container ruta| inOrderR ruta (destinationC container) (destinationC (last listacontenedores)) = True
+                                                        |destinationC container == destinationC (last listacontenedores) = True
+                                                        | otherwise = False
