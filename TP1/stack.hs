@@ -64,6 +64,13 @@ pesoNeto3 = netS apilamiento1 + netS apilamiento3
 
 holdsS :: Stack -> Container -> Route -> Bool -- indica si la pila puede aceptar el contenedor considerando las ciudades en la ruta
                                             -- nuevo contenedor no puede tener destino posterior al de abajo
-holdsS (Sta listacontenedores capacidad) container ruta| inOrderR ruta (destinationC container) (destinationC (last listacontenedores)) = True
-                                                        |destinationC container == destinationC (last listacontenedores) = True
+holdsS (Sta listacontenedores capacidad) container ruta | inOrderR ruta (destinationC container) (destinationC (last listacontenedores)) = True
+                                                        | destinationC container == destinationC (last listacontenedores) = True
                                                         | otherwise = False
+
+popS :: Stack -> String -> Stack              -- quita del tope los contenedores con destino en la ciudad indicada
+popS (Sta listacontenedores capacidad) destino |destinationC (last listacontenedores) == destino = Sta (init listacontenedores) capacidad
+                                                |otherwise = Sta listacontenedores capacidad
+                                                --CHEQUEAR!!! FALTAN COSAS
+
+
