@@ -1,4 +1,4 @@
-module Stack ( Stack, newS, freeCellsS, stackS, netS )
+module Stack ( Stack, newS, freeCellsS, stackS, netS, holdsS, popS )
  where
 
 import Container
@@ -66,6 +66,7 @@ holdsS :: Stack -> Container -> Route -> Bool -- indica si la pila puede aceptar
                                             -- nuevo contenedor no puede tener destino posterior al de abajo
 holdsS (Sta listacontenedores capacidad) container ruta | inOrderR ruta (destinationC (last listacontenedores)) (destinationC container) = True
                                                         | destinationC container == destinationC (last listacontenedores) = True
+                                                        | length listacontenedores == 0 = True
                                                         | otherwise = False
 
 popS :: Stack -> String -> Stack              -- quita del tope los contenedores con destino en la ciudad indicada
