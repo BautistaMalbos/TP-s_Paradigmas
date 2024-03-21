@@ -64,9 +64,9 @@ pesoNeto3 = netS apilamiento1 + netS apilamiento3
 
 holdsS :: Stack -> Container -> Route -> Bool -- indica si la pila puede aceptar el contenedor considerando las ciudades en la ruta
                                             -- nuevo contenedor no puede tener destino posterior al de abajo
-holdsS (Sta listacontenedores capacidad) container ruta | inOrderR ruta (destinationC (last listacontenedores)) (destinationC container) = True
+holdsS (Sta listacontenedores capacidad) container ruta | null listacontenedores = True
+                                                        | inOrderR ruta (destinationC (last listacontenedores)) (destinationC container) = True
                                                         | destinationC container == destinationC (last listacontenedores) = True
-                                                        | length listacontenedores == 0 = True
                                                         | otherwise = False
 
 popS :: Stack -> String -> Stack              -- quita del tope los contenedores con destino en la ciudad indicada
@@ -74,5 +74,6 @@ popS (Sta listacontenedores capacidad) destino  |destinationC (last listacontene
                                                 |otherwise = Sta listacontenedores capacidad
                                                 --CHEQUEAR!!! POR AHORA SOLO SACA EL ULTIMO SI COINCIDEN LOS DESTINOS
                                                 --FALTA HACER QUE SAQUE TODOS LOS CONTENEDORES DE ESE DESTINO
+                        --capaz hacer una lista con los elementos de esta lista cuyos destinos son diferentes al deseado???
 
 

@@ -15,16 +15,28 @@ freeCellsV (Ves bahias _) = sum (map freeCellsS bahias)
 
 
  
-loadV :: Vessel -> Container -> Vessel -- carga un contenedor en el barco
+{-loadV :: Vessel -> Container -> Vessel -- carga un contenedor en el barco
 loadV (Ves bahias ruta) container = Ves (map (loadContainer container ruta) bahias) ruta
 
-loadContainer :: Container -> Route -> Stack -> Stack
-loadContainer container route stack
-    | holdsS stack container route = stackS stack container
-    | otherwise = stack
+loadContainer :: Container -> Route -> Stack -> Stack --chequea si se puede cargar el container
+loadContainer container route stack | holdsS stack container route = stackS stack container
+                                    | otherwise = stack-}
 
+
+loadV :: Vessel -> Container -> Vessel
+loadV (Ves bahias ruta) container = Ves (loadxBahia bahias container ruta) ruta
+
+loadxBahia :: [Stack] -> Container -> Route -> [Stack]
+loadxBahia [] _ _ = []  -- no hay mas bahias para revisar
+loadxBahia (x:xs) container ruta    | holdsS x container ruta = stackS x container : xs  -- Si la bahia puede aceptar el contenedor lo carga y devuelve la lista sin cambiar las otras bahias
+                                    | otherwise = x : loadxBahia xs container ruta  -- Si la bahia no puede aceptar el contenedor se pasa a la siguiente bahia
+
+loadContainer :: Container -> Route -> Stack -> Stack
+loadContainer container ruta stack  | holdsS stack container ruta = stackS stack container
+                                    | otherwise = stack
 
 --unloadV :: Vessel -> String -> Vessel  -- responde un barco al que se le han descargado los contenedores que podían descargarse en la ciudad
+--unloadV barco destino = 
 
 
 --netV :: Vessel -> Int                  -- responde el peso neto en toneladas de los contenedores en el barco
