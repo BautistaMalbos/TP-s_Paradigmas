@@ -1,4 +1,4 @@
-module Vessel ( Vessel, newV, freeCellsV, loadV, loadContainer )
+module Vessel ( Vessel, newV, freeCellsV, loadV, loadxBahia, loadContainer, netV  )
  where
 
 import Container
@@ -36,7 +36,8 @@ loadContainer container ruta stack  | holdsS stack container ruta = stackS stack
                                     | otherwise = stack
 
 --unloadV :: Vessel -> String -> Vessel  -- responde un barco al que se le han descargado los contenedores que podían descargarse en la ciudad
---unloadV barco destino = 
 
 
---netV :: Vessel -> Int                  -- responde el peso neto en toneladas de los contenedores en el barco
+netV :: Vessel -> Int                  -- responde el peso neto en toneladas de los contenedores en el barco
+netV (Ves bahias _) | null bahias = 0
+                    | otherwise = sum (map netS bahias)

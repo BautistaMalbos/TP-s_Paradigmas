@@ -48,8 +48,9 @@ lugareslibres1 = freeCellsS apilamiento1 -- cuantos lugares le quedan a apilamie
 ------------------------------------
 
 netS :: Stack -> Int                          -- responde el peso neto de los contenedores en la pila
-netS (Sta pilaDeContenedores num)| length pilaDeContenedores == 1 = netC(head pilaDeContenedores)
-                                 | otherwise = netC(head pilaDeContenedores) + netS(Sta (tail pilaDeContenedores) num)
+netS (Sta pilaDeContenedores num)   |null pilaDeContenedores = 0
+                                    |length pilaDeContenedores == 1 = netC(head pilaDeContenedores)
+                                    |otherwise = netC(head pilaDeContenedores) + netS(Sta (tail pilaDeContenedores) num)
 
 --EJEMPLOS:
 ------------------------------------

@@ -14,7 +14,7 @@ stack2 = stackS stack1 container1
 
 barco1 = newV 1 2 ruta1
 
-
+barco2 = loadV barco1 container1
 
 
 
