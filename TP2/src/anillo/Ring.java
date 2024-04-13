@@ -1,48 +1,30 @@
 package anillo;
 
-import java.util.ArrayList;
-import java.util.List;
-
 public class Ring {
-
+    public SuperClase actual;
 
     public Ring(){
-        this.listaDeObjetos = new ArrayList<>();
-        this.posicion = 0;
+        this.actual = new Vacio();
     }
-
-    public List<Object> listaDeObjetos;
-    public int posicion = 0;
-
     public Ring next() {
-        if (listaDeObjetos.isEmpty()) {
-            throw new RuntimeException();
-        } else {
-            posicion = (posicion + 1) % listaDeObjetos.size();
-            return this;
-        }
+        actual = actual.next();
+        return this;
     }
 
     public Object current() {
-        if (listaDeObjetos.isEmpty()) {
-            throw new RuntimeException();
-        } else {
-            return listaDeObjetos.get(posicion);
-        }
+        return actual.current();
     }
 
     public Ring add(Object cargo) {
-        listaDeObjetos.add(posicion, cargo);
+        actual = actual.add(cargo);
         return this;
     }
 
 
     public Ring remove() {
-        listaDeObjetos.remove(posicion);
-        if (listaDeObjetos.size() != 0){
-            posicion = posicion % listaDeObjetos.size();
-        }
+        actual = actual.remove();
         return this;
     }
+
 
 }
