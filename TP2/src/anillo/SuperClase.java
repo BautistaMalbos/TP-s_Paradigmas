@@ -5,6 +5,4 @@ public abstract class SuperClase {
     public abstract Object current();
     public abstract SuperClase add(Object cargo);
     public abstract SuperClase remove();
-    public abstract Object CargoActual();
-
 }

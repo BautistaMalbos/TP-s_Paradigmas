@@ -2,53 +2,39 @@ package anillo;
 
 public class Cargado extends SuperClase {
     private Object cargoActual;
-    private Object cargoPrevio;
-    private SuperClase cargoSiguiente;
+    private Cargado cargoSiguiente;
 
     public Cargado(Object cargo){
+        cargoActual = cargo;
         cargoSiguiente = this;
-        cargoPrevio = this;
-        cargoActual = cargo;
+
     }
 
-    public Cargado(Cargado cargoViejo, Object cargo){
-        cargoViejo.cargoPrevio = this;
+    public Cargado(Object cargo, Cargado cargoViejo){
+        cargoActual = cargo;
         cargoSiguiente = cargoViejo;
-        cargoActual = cargo;
+
     }
-    @Override
     public SuperClase next(){
-        return this.cargoSiguiente;
+        return cargoSiguiente;
     }
 
-    @Override
     public Object current(){
         return cargoActual;
     }
 
-    @Override
     public SuperClase add(Object cargo){
-        SuperClase nuevaCarga = new Cargado(this, cargo);
-
-        ((Cargado)(this).cargoSiguiente).cargoSiguiente = nuevaCarga;
-
-        return nuevaCarga;
+        Cargado nuevoCargo = new Cargado(cargo, this);
+        Cargado siguienteCargado = this.cargoSiguiente;
+        siguienteCargado.cargoSiguiente = nuevoCargo;
+        return nuevoCargo;
     }
-
-
-    public Object CargoActual(){
-        return cargoActual;
-    }
-
-
-    @Override
     public SuperClase remove(){
-        if (this.cargoSiguiente == this){
+        if (cargoSiguiente == this){
             return new Vacio();
         }
         else{
-            cargoActual = cargoSiguiente.CargoActual();
-            cargoPrevio = this;
+            cargoActual = cargoSiguiente.current();
 
             return this;
 
