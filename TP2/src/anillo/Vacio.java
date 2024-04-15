@@ -19,7 +19,4 @@ public class Vacio extends SuperClase {
         throw new RuntimeException("Anillo vacío");
     }
 
-    public Object CargoActual(){
-        throw new RuntimeException("Anillo vacío");
-    }
 }
