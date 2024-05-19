@@ -1,7 +1,10 @@
+package Axiom;
+
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.function.Executable;
 
 import static org.junit.jupiter.api.Assertions.*;
+
 public class AxiomTests {
 
     @Test public void test01NewDroneWithInitialSpeedZero() {
@@ -106,5 +109,7 @@ public class AxiomTests {
                 assertThrows(Exception.class, executable)
                         .getMessage());
     }
+
+
 
 }
