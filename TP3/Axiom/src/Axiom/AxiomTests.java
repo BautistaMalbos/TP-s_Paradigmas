@@ -3,6 +3,7 @@ package Axiom;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.function.Executable;
 
+
 import static org.junit.jupiter.api.Assertions.*;
 
 public class AxiomTests {
@@ -16,9 +17,10 @@ public class AxiomTests {
     }
 
     @Test public void test03DroneWithDirectionNorthGoesWestAfterCommandLeft() {
-        assertEquals("W", new Drone().executeCommand('l').getDirection());
-    }
+        Drone drone = new Drone();
 
+        assertEquals("W", drone.executeCommand('l').getDirection());
+    }
 
     @Test public void test04DroneWithSpeedZeroGoesFasterAfterCommandIncrease() {
         Drone drone = new Drone();
@@ -28,8 +30,9 @@ public class AxiomTests {
     }
 
     @Test public void test05DroneCannotHaveNegativeSpeed() {
-        //assertThrowsLike(Drone.AxiomNotMoving, () -> new Drone().executeCommand('s'));
-        assertEquals(0, new Drone().executeCommand('s').getSpeed());
+        Drone drone = new Drone();
+
+        assertEquals(0, drone.executeCommand('s').getSpeed());
     }
 
     @Test public void testDroneCanIncreaseSpeedAndInsistInStopping() {
@@ -40,8 +43,7 @@ public class AxiomTests {
     }
 
     @Test public void test06CannotDeploySondaWhileSteady() {
-        Drone drone = new Drone();
-        assertThrowsLike(Drone.AxiomNotMoving,() -> drone.executeCommand('d'));
+        assertThrowsLike(Drone.AxiomNotMoving,() -> new Drone().executeCommand('d'));
     }
 
     @Test public void test07DeployedSondaDoesNotAffectSpeed() {
@@ -49,6 +51,7 @@ public class AxiomTests {
         drone.increaseSpeed();
         int initialSpeed = drone.getSpeed();
         drone.executeCommand('d');
+
         assertEquals(initialSpeed, drone.getSpeed());
     }
 
@@ -86,30 +89,47 @@ public class AxiomTests {
         assertThrowsLike(Drone.SondaNotDeployed, () -> new Drone().fetchSonda());
     }
 
-//    @Test public void testNNDroneCanExecuteMultipleCommandsAtOnce() {
-//        Drone drone = new Drone();
-//        drone.executeSeriesOfCommands("idifd");                  PUEDE SER INNECESARIO
-//
-//        assertEquals(true,drone.sonda);
-//    }
+    @Test public void test12ReturningNotrh() {
+        Drone drone = new Drone();
+        drone.increaseSpeed();
+        drone.executeSeriesOfCommands("lr");
+        assertEquals("N", drone.getDirection());
 
+    }
 
-//    @Test public void test11DeployedSondaPreventsDirectionChange() {
-//        Drone drone = new Drone();
-//        drone.deploySonda();                                                      MANEJAR CASO
-//
-//        assertThrowsLike(Drone.SondaDeployed, () -> drone.executeCommand('r'));
-//    }
+    @Test public void test13RotateAllRigth(){
+        Drone drone = new Drone();
+        drone.increaseSpeed();
+        drone.executeSeriesOfCommands("rrrr");
+        assertEquals("N", drone.getDirection());
 
+    }
 
+    @Test public void test14RotateAllLegth(){
+        Drone drone = new Drone();
+        drone.increaseSpeed();
+        drone.executeSeriesOfCommands("llll");
+        assertEquals("N", drone.getDirection());
 
+    }
+
+    @Test public void test15SondaCanBeDesployAfterFetch(){
+        Drone drone = new Drone();
+        drone.executeSeriesOfCommands("iidfd");
+        assertEquals(true, drone.isSondaDeployed());
+    }
+
+    @Test public void test11DeployedSondaPreventsDirectionChange() {
+        Drone drone = new Drone();
+        drone.executeSeriesOfCommands("id");
+
+        assertThrowsLike(Drone.CatastrophicError, () -> drone.executeCommand('r'));
+    }
 
     private static void assertThrowsLike(String msg, Executable executable) {
         assertEquals(msg,
                 assertThrows(Exception.class, executable)
                         .getMessage());
     }
-
-
 
 }
