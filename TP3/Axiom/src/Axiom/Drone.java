@@ -24,8 +24,8 @@ public class Drone {
     public static String SondaNotDeployed = "Sonda not deployed!!!";
 
     public Drone() {
-        this.speedOfficer = new SteadyDrone();
-        this.sondaOfficer = new StoredSonda();
+        this.speedOfficer = new SpeedOfficer();
+        this.sondaOfficer = new SondaOfficer();
         this.direction = new North();
     }
 
@@ -78,10 +78,11 @@ public class Drone {
         return this;
     }
 
-    public void executeSeriesOfCommands(String commandString) {
+    public Drone executeCommand(String commandString) {
         commandString.chars()
                 .mapToObj(c -> (char) c)
                 .forEach(this::executeCommand);
+        return this;
     }
 
 }
