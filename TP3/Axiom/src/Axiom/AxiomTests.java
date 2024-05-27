@@ -17,12 +17,10 @@ public class AxiomTests {
     }
 
     @Test public void test03DroneWithDirectionNorthGoesWestAfterCommandLeft() {
-        Drone drone = new Drone();
-
-        assertEquals("W", drone.executeCommand("l").getDirection());
+        assertEquals("W", new Drone().executeCommand("l").getDirection());
     }
 
-    @Test public void test04DroneWithSpeedZeroGoesFasterAfterCommandIncrease() {
+    @Test public void test04DroneWithSpeedZeroGoesFasterAfterCommandIncreaseSpeed() {
         Drone drone = new Drone();
         drone.executeCommand("ii");
 
@@ -30,35 +28,24 @@ public class AxiomTests {
     }
 
     @Test public void test05DroneCannotHaveNegativeSpeed() {
-        Drone drone = new Drone();
-
-        assertEquals(0, drone.executeCommand("s").getSpeed());
-    }
-
-    @Test public void testDroneCanIncreaseSpeedAndInsistInStopping() {
-        Drone drone = new Drone();
-        drone.executeCommand("isss");
-
-        assertEquals(0, drone.getSpeed());
+        assertEquals(0, new Drone().executeCommand("s").getSpeed());
     }
 
     @Test public void test06CannotDeploySondaWhileSteady() {
         assertThrowsLike(Drone.AxiomNotMoving,() -> new Drone().executeCommand("d"));
     }
 
-    @Test public void test07DeployedSondaDoesNotAffectSpeed() {
+    @Test public void test07DeployingSondaDoesNotAffectSpeed() {
         Drone drone = new Drone();
-        drone.increaseSpeed();
+        drone.executeCommand("i");
         int initialSpeed = drone.getSpeed();
-        drone.executeCommand("d");
+        drone.executeCommand("di");
 
-        assertEquals(initialSpeed, drone.getSpeed());
+        assertEquals(initialSpeed+1, drone.getSpeed());
     }
 
     @Test public void test08FetchSonda() {
-        Drone drone = new Drone();
-        drone.increaseSpeed();
-        drone.deploySonda();
+        Drone drone = droneWithSpeedOneAndDeployedSonda();
 
         assertTrue(drone.isSondaDeployed());
 
@@ -66,21 +53,15 @@ public class AxiomTests {
         assertFalse(drone.isSondaDeployed());
     }
 
-    @Test public void test09DeployedSondaPreventsSpeedReachingZero() {
-        Drone drone = new Drone();
-        drone.increaseSpeed();
-        drone.deploySonda();
 
-        assertThrowsLike(Drone.CatastrophicError, () -> drone.decreaseSpeed());
+    @Test public void test09DeployedSondaPreventsSpeedReachingZero() {
+        assertThrowsLike(Drone.CatastrophicError, () -> droneWithSpeedOneAndDeployedSonda().executeCommand("s"));
     }
 
     @Test public void test10FetchingSondaAllowsStopping() {
-        Drone drone = new Drone();
-        drone.increaseSpeed();
-        drone.deploySonda();
+        Drone drone = droneWithSpeedOneAndDeployedSonda();
 
-        drone.executeCommand("f");
-        drone.executeCommand("s");
+        drone.executeCommand("fs");
         assertEquals(0,drone.getSpeed());
     }
 
@@ -89,47 +70,58 @@ public class AxiomTests {
         assertThrowsLike(Drone.SondaNotDeployed, () -> new Drone().fetchSonda());
     }
 
-    @Test public void test12ReturningNotrh() {
+    @Test public void test12GoingLeftAndRightReturnsOriginalDirection() {
         Drone drone = new Drone();
-        drone.increaseSpeed();
+        String originalDirection = drone.getDirection();
+
         drone.executeCommand("lr");
-        assertEquals("N", drone.getDirection());
+        assertEquals(originalDirection, drone.getDirection());
 
     }
 
     @Test public void test13RotateAllRight(){
         Drone drone = new Drone();
-        drone.increaseSpeed();
+        String originalDirection = drone.getDirection();
+
         drone.executeCommand("rrrr");
-        assertEquals("N", drone.getDirection());
+        assertEquals(originalDirection, drone.getDirection());
 
     }
 
     @Test public void test14RotateAllLeft(){
         Drone drone = new Drone();
-        drone.increaseSpeed();
+        String originalDirection = drone.getDirection();
+
         drone.executeCommand("llll");
-        assertEquals("N", drone.getDirection());
+        assertEquals(originalDirection, drone.getDirection());
 
     }
 
     @Test public void test15SondaCanBeDeployedAfterFetch(){
         Drone drone = new Drone();
-        drone.executeCommand("iidfd");
-        assertEquals(true, drone.isSondaDeployed());
+        drone.executeCommand("idfd");
+
+        assertTrue(drone.isSondaDeployed());
     }
 
     @Test public void test16DeployedSondaPreventsDirectionChange() {
-        Drone drone = new Drone();
-        drone.executeCommand("id");
+        assertThrowsLike(Drone.CatastrophicError, () -> droneWithSpeedOneAndDeployedSonda().executeCommand("r"));
+    }
 
-        assertThrowsLike(Drone.CatastrophicError, () -> drone.executeCommand("r"));
+    @Test public void test17UnknownCommand() {
+        assertThrowsLike("Unknown command!", () -> new Drone().executeCommand("x"));
     }
 
     private static void assertThrowsLike(String msg, Executable executable) {
         assertEquals(msg,
                 assertThrows(Exception.class, executable)
                         .getMessage());
+    }
+
+    private static Drone droneWithSpeedOneAndDeployedSonda() {
+        Drone drone = new Drone();
+        drone.executeCommand("id");
+        return drone;
     }
 
 }
