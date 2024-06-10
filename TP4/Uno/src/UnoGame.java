@@ -46,8 +46,6 @@ public class UnoGame {
     }
 
     private void distributeCardsToPlayers(int cardsPerPlayer) {
-        //int playerCount = playerHands.size();
-
         for (int i = 0; i < cardsPerPlayer; i++) {
 
             for (String player : players) {
@@ -89,7 +87,7 @@ public class UnoGame {
                     }
                     else if(card.name() == "Draw two"){
                         int nextPlayer = nextTurn();
-                        penaltyStealTwoCards(players.get(nextPlayer));
+                        handleDrawTwoCard(players.get(nextPlayer));
                         nextTurn();
 
                     }
@@ -108,14 +106,12 @@ public class UnoGame {
                 }
                 else {
                     throw new RuntimeException("Incompatible card!");
-//                    penaltyStealTwoCards(playerName);
                 }
             }
             System.out.println(playerName +" Played a: " + pitCard().name() + pitCard().color);
         }
         else{
             throw new RuntimeException("It's not player's turn!");
-//            penaltyStealTwoCards(playerName);
         }
     }
 
@@ -169,11 +165,13 @@ public class UnoGame {
 
 
 
-    public void penaltyStealTwoCards(String aPlayer) {
+    public void handleDrawTwoCard(String aPlayer) {
         playerHands.get(aPlayer).add(deck.remove(0));
         playerHands.get(aPlayer).add(deck.remove(0));
         nextTurn();
     }
+
+
 
 
 
