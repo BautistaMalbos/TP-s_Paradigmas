@@ -16,7 +16,13 @@ public abstract class Card {
         return false;
     }
 
+    public abstract void executeAction(UnoGame game, String playerName);
+
+    public boolean canPlayOnCard(Card aCard) {
+        return aCard.color.equals(this.color) || aCard.name().equals(this.name());
     }
+
+}
 
 
 

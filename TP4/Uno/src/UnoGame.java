@@ -4,10 +4,10 @@ import java.util.HashMap;
 import java.util.List;
 
 public class UnoGame {
-    private List<Card> deck;
-    private List<Card> pit;
-    private List<String> players;
-    private int currentPlayerIndex;
+    public List<Card> deck;
+    public List<Card> pit;
+    public List<String> players;
+    public int currentPlayerIndex;
     HashMap <String, List<Card>> playerHands;
 
 
@@ -61,7 +61,6 @@ public class UnoGame {
                                               + deck.get(1).color + deck.get(1).name());
     }
 
-
     public void playCard(String playerName, Card card) {
             List<Card> playerHand = playerHands.get(playerName);
             if (playerHand == null) {
@@ -78,32 +77,33 @@ public class UnoGame {
             if (!cardFound) {
                 throw new RuntimeException("Player does not have the card!");
             } else {
-                if (card.color == pitCard().color || card.name() == pitCard().name()){
+                if (card.canPlayOnCard(pitCard())) {
                     playerHand.remove(card);
                     pit.add(card);
-                    //System.out.println("Top of Pit: " + pitCard().name() + pitCard().color);
-                    if(card.name() == "Skip"){
-                        handleSkipCard();
-                    }
-                    else if(card.name() == "Draw two"){
-                        int nextPlayer = nextTurn();
-                        handleDrawTwoCard(players.get(nextPlayer));
-                        nextTurn();
-
-                    }
-                    else if(card.name() == "Reverse") {
-                        Collections.reverse(players);
-                        //nextTurn();
-                    }
-                    else {
-                        nextTurn();
-                    }
-                } else if (card.isWildCard()) {
-                    playerHand.remove(card);
-                    ((WildCard) card).chooseColor();
-                    pit.add(card);
+                    card.executeAction(this, playerName);
                     nextTurn();
                 }
+//                    if(card.name() == "Skip"){
+//                        handleSkipCard();
+//                    }
+//                    else if(card.name() == "Draw two"){
+//                        int nextPlayer = nextTurn();
+//                        handleDrawTwoCard(players.get(nextPlayer));
+//                        nextTurn();
+//
+//                    }
+//                    else if(card.name() == "Reverse") {
+//                        handleReverseCard();
+//                    }
+//                    else {
+//                        nextTurn();
+//                    }
+//                } else if (card.isWildCard()) {
+//                    playerHand.remove(card);
+//                    ((WildCard) card).chooseColor();
+//                    pit.add(card);
+//                    nextTurn();
+//                }
                 else {
                     throw new RuntimeException("Incompatible card!");
                 }
@@ -113,6 +113,11 @@ public class UnoGame {
         else{
             throw new RuntimeException("It's not player's turn!");
         }
+    }
+
+    public void handleReverseCard() {
+        Collections.reverse(players);
+        nextTurn();
     }
 
 
@@ -137,7 +142,7 @@ public class UnoGame {
         return null;
     }
 
-    public void stealCard(String aPlayer, List<Card> deck) {
+    public void stealACard(String aPlayer, List<Card> deck) {
         if(playersTurn(aPlayer)){
             if (!deck.isEmpty()) {
                 Card stolenCard = deck.remove(deck.size() - 1);
@@ -160,16 +165,17 @@ public class UnoGame {
 
     public void handleSkipCard() {
         nextTurn();
-        nextTurn();
     }
 
 
 
-    public void handleDrawTwoCard(String aPlayer) {
-        playerHands.get(aPlayer).add(deck.remove(0));
-        playerHands.get(aPlayer).add(deck.remove(0));
+    public void handleDrawTwoCard() {
+        int nextPlayer = nextTurn();
+        playerHands.get(players.get(nextPlayer)).add(deck.remove(0));
+        playerHands.get(players.get(nextPlayer)).add(deck.remove(0));
         nextTurn();
     }
+
 
 
 

@@ -1,9 +1,23 @@
+import java.util.Collections;
+import java.util.List;
+
 public class ReverseCard extends Card {
+//    private List<String> players;
+
+
     public ReverseCard(String color){
         super(color);
     }
 
     public String name() {
         return "Reverse";
+    }
+
+    public void executeAction(UnoGame game, String playerName) {
+        game.handleReverseCard();
+    }
+
+    public boolean canPlayOn(Card other) {
+        return other.color.equals(this.color);
     }
 }

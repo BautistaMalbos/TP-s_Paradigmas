@@ -7,6 +7,14 @@ public class SkipCard extends Card {
         return "Skip";
     }
 
+    public void executeAction(UnoGame game, String playerName) {
+        game.handleSkipCard();
+    }
+
+    public boolean canPlayOn(Card other) {
+        return other.color.equals(this.color)||other.name().equals(this.name());
+    }
+
 }
 
 

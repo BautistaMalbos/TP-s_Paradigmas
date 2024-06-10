@@ -16,4 +16,13 @@ public class WildCard extends Card {
     public boolean isWildCard() {
         return true;
     }
+
+    public void executeAction(UnoGame game, String playerName) {
+        this.color = chosenColor;
+    }
+
+    public boolean canPlayOnCard(Card aCard) {
+        return true;
+    }
+
 }

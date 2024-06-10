@@ -101,7 +101,7 @@ public class UnoTest {
         UnoGame game = validUnoGameTwoPlayers();
         int aliceHandBeforeStealing = game.playerHands.get("Alice").size();
         int deckSizeBefore = deckForTwo.size();
-        game.stealCard("Alice", deckForTwo);
+        game.stealACard("Alice", deckForTwo);
         int aliceHandAfterStealing= game.playerHands.get("Alice").size();
         int deckSizeAfter = deckForTwo.size();
 
@@ -113,7 +113,7 @@ public class UnoTest {
         UnoGame game = validUnoGameTwoPlayers();
         game.playCard("Alice", new SkipCard("Green"));
 
-        assertThrowsLike("It's not player's turn!", ()-> game.playCard("Bob", new NumberedCard("Blue", "1")));
+        assertThrowsLike("It's not player's turn!", ()-> game.playCard("Bob", new NumberedCard("Green", "3")));
         assertEqualsPitCardColorAndNumber("Skip", game, "Green");
         assertEquals("Alice", game.currentTurn());
 
@@ -140,7 +140,7 @@ public class UnoTest {
 
     @Test void test13StealCompatibleCard() {
         UnoGame game = validUnoGameTwoPlayers();
-        game.stealCard("Alice",deckForTwo);
+        game.stealACard("Alice",deckForTwo);
         game.playCard("Bob", new NumberedCard("Blue", "1"));
 
         assertEqualsPitCardColorAndNumber("1", game, "Blue");
@@ -158,7 +158,7 @@ public class UnoTest {
         UnoGame game = validUnoGameTwoPlayers();
         game.playCard("Alice", new WildCard("Yellow"));
         int bobHandBeforeStealing = game.playerHands.get("Bob").size();
-        game.stealCard("Bob",deckForTwo);
+        game.stealACard("Bob",deckForTwo);
 
         assertEquals("Alice", game.currentTurn());
         assertEquals(bobHandBeforeStealing+1, game.playerHands.get("Bob").size());

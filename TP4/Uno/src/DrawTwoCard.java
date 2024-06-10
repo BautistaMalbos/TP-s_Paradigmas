@@ -7,4 +7,11 @@ public class DrawTwoCard extends Card{
         return "Draw two";
     }
 
+    public void executeAction(UnoGame game, String playerName) {
+        game.handleDrawTwoCard();
+    }
+
+    public boolean canPlayOnCard(Card aCard) {
+        return aCard.color.equals(this.color);
+    }
 }

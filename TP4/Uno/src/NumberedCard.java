@@ -10,5 +10,13 @@ public class NumberedCard extends Card {
         return name;
     }
 
+    public void executeAction(UnoGame game, String playerName) {
+        // Do nothing
+    }
+
+
+    public boolean canPlayOnCard(Card aCard) {
+        return aCard.color.equals(this.color) || aCard.name().equals(this.name());
+    }
 }
 
