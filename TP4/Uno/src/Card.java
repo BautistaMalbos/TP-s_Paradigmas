@@ -12,10 +12,13 @@ public abstract class Card {
         if (this == aCard) return true;
         if (aCard == null || getClass() != aCard.getClass()) return false;
         Card card = (Card) aCard;
-        return color.equals(card.color) && number().equals(card.number());
+        return color.equals(card.color) && name().equals(card.name());
     }
-    public abstract String number();
+    public abstract String name();
     //public abstract String type();
+    public boolean isWildCard() {
+        return false;
+    }
 
     }
 

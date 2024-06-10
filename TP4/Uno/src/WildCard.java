@@ -1,14 +1,19 @@
 public class WildCard extends Card {
-
-    public WildCard(){
-        super("wild");
+    private String chosenColor;
+    public WildCard(String chosenColor){
+        super("Wild");
+        this.chosenColor = chosenColor;
     }
 
-    public String number() {
-        return null;
-    }
-
-    public String type() {
+    public String name() {
         return "Wild";
+    }
+
+    public void chooseColor() {
+        this.color = chosenColor;
+    }
+
+    public boolean isWildCard() {
+        return true;
     }
 }

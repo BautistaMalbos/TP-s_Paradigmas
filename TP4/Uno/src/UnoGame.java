@@ -1,4 +1,5 @@
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 
@@ -33,20 +34,19 @@ public class UnoGame {
 
     private void startGame() {
         distributeCardsToPit();
-        distributeCardsToPlayers();
+        distributeCardsToPlayers(6);
     }
 
     private void distributeCardsToPit() {
         if (!deck.isEmpty()) {
             Card card = deck.remove(deck.size() - 1);
             pit.add(card);
-            System.out.println("Added to pit: " + pitCard().number() + pitCard().color );
+            System.out.println("Added to pit: " + pitCard().name() + pitCard().color );
         }
     }
 
-    private void distributeCardsToPlayers() {
+    private void distributeCardsToPlayers(int cardsPerPlayer) {
         //int playerCount = playerHands.size();
-        int cardsPerPlayer = 5;
 
         for (int i = 0; i < cardsPerPlayer; i++) {
 
@@ -54,12 +54,13 @@ public class UnoGame {
                 if (!deck.isEmpty()) {
                     Card card = deck.remove(deck.size() - 1);
                     playerHands.get(player).add(card);
-                    System.out.println("Added to " + player + "'s hand: " + card.number() + card.color);
+                    System.out.println("Added to " + player + "'s hand: " + card.name() + card.color);
                 }
             }
         }
-        System.out.println("Remaining deck: " + deck.get(0).color + deck.get(0).number()
-                                              + deck.get(1).color + deck.get(1).number());
+        System.out.println("Remaining deck: " + deck.get(0).color + deck.get(0).name()
+                                              + " "
+                                              + deck.get(1).color + deck.get(1).name());
     }
 
 
@@ -79,28 +80,57 @@ public class UnoGame {
             if (!cardFound) {
                 throw new RuntimeException("Player does not have the card!");
             } else {
-                if (card.color == pitCard().color || card.number() == pitCard().number()) {
+                if (card.color == pitCard().color || card.name() == pitCard().name()){
                     playerHand.remove(card);
                     pit.add(card);
-                    System.out.println("Top of Pit: " + pitCard().number() + pitCard().color);
-//                    if(card.number() == "Skip"){}
+                    //System.out.println("Top of Pit: " + pitCard().name() + pitCard().color);
+                    if(card.name() == "Skip"){
+                        handleSkipCard();
+                    }
+                    else if(card.name() == "Draw two"){
+                        int nextPlayer = nextTurn();
+                        penaltyStealTwoCards(players.get(nextPlayer));
+                        nextTurn();
+
+                    }
+                    else if(card.name() == "Reverse") {
+                        Collections.reverse(players);
+                        //nextTurn();
+                    }
+                    else {
+                        nextTurn();
+                    }
+                } else if (card.isWildCard()) {
+                    playerHand.remove(card);
+                    ((WildCard) card).chooseColor();
+                    pit.add(card);
                     nextTurn();
-                } else {
+                }
+                else {
                     throw new RuntimeException("Incompatible card!");
+//                    penaltyStealTwoCards(playerName);
                 }
             }
+            System.out.println(playerName +" Played a: " + pitCard().name() + pitCard().color);
         }
         else{
             throw new RuntimeException("It's not player's turn!");
+//            penaltyStealTwoCards(playerName);
         }
     }
+
 
     private boolean playersTurn(String playerName) {
         return players.get(currentPlayerIndex).equals(playerName);
     }
 
-    private void nextTurn() {
+    private int nextTurn() {
         currentPlayerIndex = (currentPlayerIndex + 1) % playerHands.size();
+        return currentPlayerIndex;
+    }
+
+    public String currentTurn() {
+        return players.get(currentPlayerIndex);
     }
 
 
@@ -116,8 +146,14 @@ public class UnoGame {
             if (!deck.isEmpty()) {
                 Card stolenCard = deck.remove(deck.size() - 1);
                 playerHands.get(aPlayer).add(stolenCard);
-                System.out.println(aPlayer + " stole a card: " + stolenCard.number() + " " + stolenCard.color);
-                nextTurn();
+                System.out.println(aPlayer + " stole a card: " + stolenCard.name() + " " + stolenCard.color);
+                if(stolenCard.color == pitCard().color || stolenCard.name() == pitCard().name()){
+                    pit.add(stolenCard);
+                    nextTurn();
+                }
+                else{
+                    nextTurn();
+                }
             } else {
                 throw new RuntimeException("Deck is empty!");
             }
@@ -125,4 +161,22 @@ public class UnoGame {
             throw new RuntimeException("It's not player's turn!");
         }
     }
+
+    public void handleSkipCard() {
+        nextTurn();
+        nextTurn();
+    }
+
+
+
+    public void penaltyStealTwoCards(String aPlayer) {
+        playerHands.get(aPlayer).add(deck.remove(0));
+        playerHands.get(aPlayer).add(deck.remove(0));
+        nextTurn();
+    }
+
+
+
+
+
 }
