@@ -11,12 +11,11 @@ public class UnoGame {
     HashMap <String, List<Card>> playerHands;
 
 
-    public UnoGame(List <Card> deck, List<Card> pit, String ... players ) {
+    public UnoGame(List <Card> deck, String ... players ) {
         this.deck = deck;
-        this.pit = pit;
         this.playerHands = new HashMap<>();
         this.players = new ArrayList<>();
-
+        this.pit = new ArrayList<>();
         for (String player : players) {
             playerHands.put(player, new ArrayList<>());
             this.players.add(player);
@@ -120,7 +119,6 @@ public class UnoGame {
         nextTurn();
     }
 
-
     private boolean playersTurn(String playerName) {
         return players.get(currentPlayerIndex).equals(playerName);
     }
@@ -133,7 +131,6 @@ public class UnoGame {
     public String currentTurn() {
         return players.get(currentPlayerIndex);
     }
-
 
     public Card pitCard() {
         if (!pit.isEmpty()) {
@@ -148,7 +145,7 @@ public class UnoGame {
                 Card stolenCard = deck.remove(deck.size() - 1);
                 playerHands.get(aPlayer).add(stolenCard);
                 System.out.println(aPlayer + " stole a card: " + stolenCard.name() + " " + stolenCard.color);
-                if(stolenCard.color == pitCard().color || stolenCard.name() == pitCard().name()){
+                if(stolenCard.canPlayOnCard(pitCard())){
                     pit.add(stolenCard);
                     nextTurn();
                 }
@@ -175,12 +172,5 @@ public class UnoGame {
         playerHands.get(players.get(nextPlayer)).add(deck.remove(0));
         nextTurn();
     }
-
-
-
-
-
-
-
 
 }

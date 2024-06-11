@@ -27,7 +27,6 @@ public class UnoTest {
                 new NumberedCard("Green", "3"), new SkipCard("Green"),
                             new NumberedCard("Green", "0")
         ));               //                          PIT CARD
-        pit = new ArrayList<>();
     }
 
 
@@ -55,7 +54,7 @@ public class UnoTest {
     }
 
     @Test void test02NotEnoughPlayersToStartGame() {
-        assertThrowsLike("Game cannot be started with less than two players.", ()-> new UnoGame(deckForTwo,pit,"Alice"));
+        assertThrowsLike("Game cannot be started with less than two players.", ()-> new UnoGame(deckForTwo,"Alice"));
     }
     @Test void test03PlayerCanPlayACard() {
         UnoGame game = validUnoGameTwoPlayers();
@@ -178,11 +177,11 @@ public class UnoTest {
 
 
     private UnoGame unoGameWithThreePlayers() {
-        return new UnoGame(deckForThree, pit, "Alice", "Bob", "Charlie");
+        return new UnoGame(deckForThree, "Alice", "Bob", "Charlie");
     }
 
     private UnoGame validUnoGameTwoPlayers() {
-        return new UnoGame(deckForTwo, pit, "Alice", "Bob");
+        return new UnoGame(deckForTwo, "Alice", "Bob");
     }
     private static void alicePlays0Red(UnoGame game) {
         game.playCard("Alice", new NumberedCard("Red", "0"));

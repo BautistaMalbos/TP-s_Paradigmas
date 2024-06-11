@@ -2,9 +2,6 @@ import java.util.Collections;
 import java.util.List;
 
 public class ReverseCard extends Card {
-//    private List<String> players;
-
-
     public ReverseCard(String color){
         super(color);
     }

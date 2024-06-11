@@ -14,7 +14,6 @@ public class NumberedCard extends Card {
         // Do nothing
     }
 
-
     public boolean canPlayOnCard(Card aCard) {
         return aCard.color.equals(this.color) || aCard.name().equals(this.name());
     }
