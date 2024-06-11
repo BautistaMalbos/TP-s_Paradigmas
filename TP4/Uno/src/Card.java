@@ -12,10 +12,6 @@ public abstract class Card {
     }
     public abstract String name();
 
-    public boolean isWildCard() {
-        return false;
-    }
-
     public abstract void executeAction(UnoGame game, String playerName);
 
     public boolean canPlayOnCard(Card aCard) {

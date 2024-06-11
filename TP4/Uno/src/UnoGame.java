@@ -80,29 +80,7 @@ public class UnoGame {
                     playerHand.remove(card);
                     pit.add(card);
                     card.executeAction(this, playerName);
-                    nextTurn();
                 }
-//                    if(card.name() == "Skip"){
-//                        handleSkipCard();
-//                    }
-//                    else if(card.name() == "Draw two"){
-//                        int nextPlayer = nextTurn();
-//                        handleDrawTwoCard(players.get(nextPlayer));
-//                        nextTurn();
-//
-//                    }
-//                    else if(card.name() == "Reverse") {
-//                        handleReverseCard();
-//                    }
-//                    else {
-//                        nextTurn();
-//                    }
-//                } else if (card.isWildCard()) {
-//                    playerHand.remove(card);
-//                    ((WildCard) card).chooseColor();
-//                    pit.add(card);
-//                    nextTurn();
-//                }
                 else {
                     throw new RuntimeException("Incompatible card!");
                 }
@@ -116,14 +94,13 @@ public class UnoGame {
 
     public void handleReverseCard() {
         Collections.reverse(players);
-        nextTurn();
     }
 
     private boolean playersTurn(String playerName) {
         return players.get(currentPlayerIndex).equals(playerName);
     }
 
-    private int nextTurn() {
+    public int nextTurn() {
         currentPlayerIndex = (currentPlayerIndex + 1) % playerHands.size();
         return currentPlayerIndex;
     }
@@ -147,7 +124,7 @@ public class UnoGame {
                 System.out.println(aPlayer + " stole a card: " + stolenCard.name() + " " + stolenCard.color);
                 if(stolenCard.canPlayOnCard(pitCard())){
                     pit.add(stolenCard);
-                    nextTurn();
+                    stolenCard.executeAction(this, aPlayer);
                 }
                 else{
                     nextTurn();
@@ -162,15 +139,44 @@ public class UnoGame {
 
     public void handleSkipCard() {
         nextTurn();
+        nextTurn();
     }
 
 
 
     public void handleDrawTwoCard() {
         int nextPlayer = nextTurn();
+        if(!deck.isEmpty()){
         playerHands.get(players.get(nextPlayer)).add(deck.remove(0));
         playerHands.get(players.get(nextPlayer)).add(deck.remove(0));
         nextTurn();
+        nextTurn();
+        }
+        else{
+            throw new RuntimeException("Deck is empty!");
+        }
     }
 
 }
+// MANEJO DE CADA CARTA CON IF STATEMENTS
+//                    if(card.name() == "Skip"){
+//                        handleSkipCard();
+//                    }
+//                    else if(card.name() == "Draw two"){
+//                        int nextPlayer = nextTurn();
+//                        handleDrawTwoCard(players.get(nextPlayer));
+//                        nextTurn();
+//
+//                    }
+//                    else if(card.name() == "Reverse") {
+//                        handleReverseCard();
+//                    }
+//                    else {
+//                        nextTurn();
+//                    }
+//                } else if (card.isWildCard()) {
+//                    playerHand.remove(card);
+//                    ((WildCard) card).chooseColor();
+//                    pit.add(card);
+//                    nextTurn();
+//                }

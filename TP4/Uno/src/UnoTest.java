@@ -11,12 +11,13 @@ import java.util.List;
 public class UnoTest {
     private List<Card> deckForTwo;
     private List<Card> deckForThree;
-    private List<Card> pit;
+   //private List<Card> pit;
 
 
     {deckForTwo = new ArrayList<>(Arrays.asList(
             //                 MAZO DESPUES DE REPARTIR 5 PARA CADA UNO Y 1 AL PIT
-                new NumberedCard("Green", "2"), new NumberedCard("Green", "1"),
+                new DrawTwoCard("Red"), new NumberedCard("Blue", "8"),
+                new DrawTwoCard("Green"), new NumberedCard("Green", "1"),
 
                  //                 CARTAS DE BOB           AL REPARTIR            CARTAS DE ALICE
                 new WildCard("Wild"),            new ReverseCard("Green"),
@@ -24,7 +25,7 @@ public class UnoTest {
                 new NumberedCard("Blue", "1"), new WildCard("Wild"),
                 new NumberedCard("Blue", "2"), new NumberedCard("Red", "2"),
                 new NumberedCard("Blue", "3"), new DrawTwoCard("Green"),
-                new NumberedCard("Green", "3"), new SkipCard("Green"),
+                new NumberedCard("Green", "3"),new SkipCard("Green"),
                             new NumberedCard("Green", "0")
         ));               //                          PIT CARD
     }
@@ -39,11 +40,11 @@ public class UnoTest {
                 new NumberedCard("Yellow", "3"), new NumberedCard("Blue", "3"), new NumberedCard("Red", "3"),
                 new NumberedCard("Yellow", "2"), new NumberedCard("Blue", "2"), new NumberedCard("Red", "2"),
                 new NumberedCard("Yellow", "1"), new NumberedCard("Blue", "1"), new NumberedCard("Red", "1"),
-                new NumberedCard("Yellow", "0"), new NumberedCard("Blue", "1"), new NumberedCard("Red", "0"),
+                new NumberedCard("Yellow", "0"), new NumberedCard("Blue", "1"), new ReverseCard("Green"),
                 new SkipCard("Yellow"),                 new SkipCard("Blue"),                  new SkipCard("Green"),
                                                     new NumberedCard("Green", "0")
         ));               //                                        PIT CARD
-    pit = new ArrayList<>();
+    //pit = new ArrayList<>();
         }
 
 
@@ -127,7 +128,7 @@ public class UnoTest {
         assertEquals("Bob", game.currentTurn());
     }
 
-    @Test void test12DrawTwoCardMakesNextPlayerStealTwoCards() {
+    @Test void test12DrawTwoCardMakesNextPlayerStealTwoCardsAndLoseTurn() {
         UnoGame game = validUnoGameTwoPlayers();
         int bobHand = game.playerHands.get("Bob").size();
         game.playCard("Alice", new DrawTwoCard("Green"));
@@ -137,9 +138,9 @@ public class UnoTest {
         assertEquals(bobHand + 2, game.playerHands.get("Bob").size());
     }
 
-    @Test void test13StealCompatibleCard() {
+    @Test void test13SteaCompatibleCard() {
         UnoGame game = validUnoGameTwoPlayers();
-        game.stealACard("Alice",deckForTwo);
+        game.stealACard("Alice", deckForTwo); //roba carta, como es compatible la juega, pasa turno
         game.playCard("Bob", new NumberedCard("Blue", "1"));
 
         assertEqualsPitCardColorAndNumber("1", game, "Blue");
@@ -169,6 +170,26 @@ public class UnoTest {
         game.playCard("Bob", new NumberedCard("Green", "3"));
 
         assertEqualsPitCardColorAndNumber("3", game, "Green");
+    }
+
+    @Test void test17PlayerStealsACompatibleDrawTwoCardAndEffectIsExecuted() {
+        UnoGame game = validUnoGameTwoPlayers();
+        game.stealACard("Alice", deckForTwo);
+        int aliceHandBeforeDrawTwo = game.playerHands.get("Alice").size();
+        game.stealACard("Bob", deckForTwo);
+
+
+        assertEqualsPitCardColorAndNumber("Draw two", game, "Green");
+        assertEquals(aliceHandBeforeDrawTwo + 2, game.playerHands.get("Alice").size());
+    }
+
+    @Test void test18ReverseCardWith3Players() {
+        UnoGame game = unoGameWithThreePlayers();
+        game.playCard("Alice", new ReverseCard("Green"));//el orden es Alice, Bob, Charlie
+        game.playCard("Charlie", new NumberedCard("Green", "4"));//el orden es Charlie, Bob, Alice por el reverse
+
+        assertEqualsPitCardColorAndNumber("4", game, "Green");
+
     }
 
 

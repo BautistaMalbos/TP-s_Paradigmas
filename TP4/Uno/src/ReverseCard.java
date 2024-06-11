@@ -15,6 +15,6 @@ public class ReverseCard extends Card {
     }
 
     public boolean canPlayOn(Card other) {
-        return other.color.equals(this.color);
+        return other.color.equals(this.color)||other.name().equals(this.name());
     }
 }

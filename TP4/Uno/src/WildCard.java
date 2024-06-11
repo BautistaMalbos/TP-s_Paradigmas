@@ -9,16 +9,13 @@ public class WildCard extends Card {
         return "Wild";
     }
 
-    public void chooseColor() {
-        this.color = chosenColor;
-    }
-
-    public boolean isWildCard() {
-        return true;
-    }
+//    public void chooseColor() {
+//        this.color = chosenColor;
+//    }
 
     public void executeAction(UnoGame game, String playerName) {
         this.color = chosenColor;
+        game.nextTurn();
     }
 
     public boolean canPlayOnCard(Card aCard) {

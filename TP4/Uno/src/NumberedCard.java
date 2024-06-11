@@ -11,7 +11,7 @@ public class NumberedCard extends Card {
     }
 
     public void executeAction(UnoGame game, String playerName) {
-        // Do nothing
+        game.nextTurn();
     }
 
     public boolean canPlayOnCard(Card aCard) {
