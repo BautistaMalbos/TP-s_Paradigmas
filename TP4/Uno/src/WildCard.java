@@ -1,20 +1,21 @@
 public class WildCard extends Card {
     private String chosenColor;
-    public WildCard(String chosenColor){
-        super("Wild");
-        this.chosenColor = chosenColor;
+    public WildCard(){
+        super(null);
     }
 
     public String name() {
         return "Wild";
     }
 
-//    public void chooseColor() {
-//        this.color = chosenColor;
-//    }
-
-    public void executeAction(UnoGame game, String playerName) {
+    public Card chooseColor(String chosenColor) {
+        if(chosenColor != "Yellow" && chosenColor != "Red" && chosenColor != "Green" && chosenColor != "Blue"){
+            throw new RuntimeException("Invalid color");
+        }
         this.color = chosenColor;
+        return this;
+    }
+    public void executeAction(UnoGame game, String playerName) {
         game.nextTurn();
     }
 

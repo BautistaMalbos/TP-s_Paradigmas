@@ -11,7 +11,7 @@ public class SkipCard extends Card {
         game.handleSkipCard();
     }
 
-    public boolean canPlayOn(Card other) {
+    public boolean canPlayOnCard(Card other) {
         return other.color.equals(this.color)||other.name().equals(this.name());
     }
 
